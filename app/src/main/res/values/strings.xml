@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AndroidRxSamples</string>
+    <string name="ets_host">Host name</string>
+    <string name="ets_path">Path</string>
+    <string name="result">Result</string>
+    <string name="ets_result_label">Result URL:</string>
+</resources>
