@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference android:title="@string/sample_email">
+        <intent
+            android:targetClass="com.github.marwinxxii.rxsamples.EmailSampleActivity"
+            android:targetPackage="@string/app_id" />
+    </Preference>
+    <Preference android:title="@string/sample_edittext">
+        <intent
+            android:targetClass="com.github.marwinxxii.rxsamples.EditTextSampleActivity"
+            android:targetPackage="@string/app_id" />
+    </Preference>
+</PreferenceScreen>

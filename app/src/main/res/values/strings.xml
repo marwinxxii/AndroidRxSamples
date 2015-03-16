@@ -4,4 +4,14 @@
     <string name="ets_path">Path</string>
     <string name="result">Result</string>
     <string name="ets_result_label">Result URL:</string>
+    <string name="email">Email</string>
+    <string name="email_label">Your email:</string>
+    <string name="sample_edittext">Edit text sample</string>
+    <string name="sample_email">Email sample (EditText+Spinner)</string>
+
+    <string-array name="domains">
+        <item>rxmail.com</item>
+        <item>rxmail.io</item>
+        <item>reactivemail.net</item>
+    </string-array>
 </resources>
