@@ -15,37 +15,34 @@ import rx.functions.Func2;
 import rx.subjects.PublishSubject;
 
 public class EmailSampleActivity extends Activity {
-    private EditText mLogin, mResult;
-    private Spinner mDomain;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_email);
-        mLogin = (EditText) findViewById(R.id.login);
-        mDomain = (Spinner) findViewById(R.id.domain);
-        mResult = (EditText) findViewById(R.id.result);
-        mResult.setEnabled(false);
+        EditText loginText = (EditText) findViewById(R.id.login);
+        Spinner domainSpinner = (Spinner) findViewById(R.id.domain);
+        final EditText resultText = (EditText) findViewById(R.id.result);
+        resultText.setEnabled(false);
 
         Observable.combineLatest(
-          WidgetObservable.text(mLogin, true),
-          observeSelect(mDomain),
+          WidgetObservable.text(loginText, true),
+          observeSelect(domainSpinner),
 
           new Func2<OnTextChangeEvent, String, String>() {
               @Override
               public String call(OnTextChangeEvent onTextChangeEvent, String domain) {
-                  CharSequence login = onTextChangeEvent.text();
-                  if (TextUtils.isEmpty(login)) {
+                  CharSequence userLogin = onTextChangeEvent.text();
+                  if (TextUtils.isEmpty(userLogin)) {
                       return "";
                   } else {
-                      return login.toString() + '@' + domain;
+                      return userLogin.toString() + '@' + domain;
                   }
               }
           }
         ).subscribe(new Action1<String>() {
             @Override
             public void call(String email) {
-                mResult.setText(email);
+                resultText.setText(email);
             }
         });
     }
