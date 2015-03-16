@@ -18,7 +18,7 @@ public class EditTextSampleActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edittext_sample);
+        setContentView(R.layout.activity_sample_edittext);
         mHost = (EditText) findViewById(R.id.ets_host);
         mPath = (EditText) findViewById(R.id.ets_path);
         mResult = (EditText) findViewById(R.id.result);
@@ -47,7 +47,7 @@ public class EditTextSampleActivity extends Activity {
 
     private void initRxWay() {
         Observable.combineLatest(
-          WidgetObservable.text(mHost, false),
+          WidgetObservable.text(mHost, false),//false - do not emit start value
           WidgetObservable.text(mPath, true),//can be false if both fields are mandatory for result URL
 
           new Func2<OnTextChangeEvent, OnTextChangeEvent, Uri>() {
