@@ -2,6 +2,7 @@ package com.github.marwinxxii.rxsamples;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -33,8 +34,12 @@ public class EmailSampleActivity extends Activity {
           new Func2<OnTextChangeEvent, String, String>() {
               @Override
               public String call(OnTextChangeEvent onTextChangeEvent, String domain) {
-                  String login = onTextChangeEvent.text().toString();
-                  return login + '@' + domain;
+                  CharSequence login = onTextChangeEvent.text();
+                  if (TextUtils.isEmpty(login)) {
+                      return "";
+                  } else {
+                      return login.toString() + '@' + domain;
+                  }
               }
           }
         ).subscribe(new Action1<String>() {
