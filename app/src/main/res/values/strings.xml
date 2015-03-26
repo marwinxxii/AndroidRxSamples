@@ -8,6 +8,14 @@
     <string name="email_label">Your email:</string>
     <string name="sample_edittext">Edit text sample</string>
     <string name="sample_email">Email sample (EditText+Spinner)</string>
+    <string name="sample_wizard">Wizard sample (Pizza!)</string>
+    
+    <string name="sample_wizard_step1_title">Select your pizza (1/3)</string>
+    <string name="sample_wizard_step2_title">Select pizza size (2/3)</string>
+    <string name="size_super_big">Super big (75cm)</string>
+    <string name="sample_wizard_step2_next">Choose flavors</string>
+    <string name="size_big">Big (45cm)</string>
+    <string name="size_standard">Standard (30cm)</string>
 
     <string-array name="domains">
         <item>rxmail.com</item>

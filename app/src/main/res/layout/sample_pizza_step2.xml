@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout style="@style/Default"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/sample_wizard_step2_sizes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/pizza_size_super_big"
+            style="@style/RadioItem"
+            android:text="@string/size_super_big" />
+
+        <RadioButton
+            android:id="@+id/pizza_size_big"
+            style="@style/RadioItem"
+            android:text="@string/size_big" />
+
+        <RadioButton
+            android:id="@+id/pizza_size_standard"
+            style="@style/RadioItem"
+            android:text="@string/size_standard" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sample_wizard_step2_next" />
+</LinearLayout>
