@@ -24,10 +24,23 @@ android {
         versionName "1.0"
         resValue 'string', 'app_id', applicationId
     }
+    if (project.hasProperty('mykeystore')) {
+        signingConfigs {
+            release {
+                storeFile file(project.getProperty('mykeystore'))
+                storePassword project.getProperty('mykeystore.password')
+                keyAlias project.getProperty('mykeystore.keyAlias')
+                keyPassword project.getProperty('mykeystore.keyPassword')
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (project.hasProperty('mykeystore')) {
+                signingConfig signingConfigs.release
+            }
         }
     }
 }
