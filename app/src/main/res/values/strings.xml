@@ -9,13 +9,18 @@
     <string name="sample_edittext">Edit text sample</string>
     <string name="sample_email">Email sample (EditText+Spinner)</string>
     <string name="sample_wizard">Wizard sample (Pizza!)</string>
-    
+
     <string name="sample_wizard_step1_title">Select your pizza (1/3)</string>
     <string name="sample_wizard_step2_title">Select pizza size (2/3)</string>
-    <string name="size_super_big">Super big (75cm)</string>
     <string name="sample_wizard_step2_next">Choose flavors</string>
+    <string name="size_super_big">Super big (75cm)</string>
     <string name="size_big">Big (45cm)</string>
     <string name="size_standard">Standard (30cm)</string>
+    <string name="sample_wizard_step3_title">Submit your order (3/3)</string>
+    <string name="sample_wizard_step3_type_label">Pizza:</string>
+    <string name="sample_wizard_step3_size_label">Size:</string>
+    <string name="sample_wizard_step3_phone_label">Enter your phone:</string>
+    <string name="submit">Submit</string>
 
     <string-array name="domains">
         <item>rxmail.com</item>

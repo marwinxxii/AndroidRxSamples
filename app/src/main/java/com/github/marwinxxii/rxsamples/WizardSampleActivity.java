@@ -2,9 +2,13 @@ package com.github.marwinxxii.rxsamples;
 
 import android.app.*;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import rx.Observable;
 import rx.android.view.OnClickEvent;
@@ -34,17 +38,31 @@ public class WizardSampleActivity extends Activity {
                   return selectPizzaFragment.observeSelectedPizza();
               }
           })
-          .flatMap(new Func1<Pizza, Observable<Size>>() {
+          .flatMap(new Func1<Pizza, Observable<Pair<Pizza, Size>>>() {
               @Override
-              public Observable<Size> call(Pizza pizza) {
+              public Observable<Pair<Pizza, Size>> call(final Pizza pizza) {
                   SelectSizeFragment selectSizeFragment = new SelectSizeFragment();
                   showFragment(selectSizeFragment, true);
-                  return selectSizeFragment.observeSelectedSize();
+                  return selectSizeFragment.observeSelectedSize().map(new Func1<Size, Pair<Pizza, Size>>() {
+                      @Override
+                      public Pair<Pizza, Size> call(Size size) {
+                          return new Pair<>(pizza, size);
+                      }
+                  });
               }
-          }).subscribe(new Action1<Size>() {
+          })
+          .flatMap(new Func1<Pair<Pizza, Size>, Observable<PizzaOrder>>() {
+              @Override
+              public Observable<PizzaOrder> call(Pair<Pizza, Size> params) {
+                  SubmitOrderFragment submitFragment = SubmitOrderFragment.create(params.first, params.second);
+                  showFragment(submitFragment, true);
+                  return submitFragment.observeOrder();
+              }
+          }).subscribe(new Action1<PizzaOrder>() {
             @Override
-            public void call(Size size) {
-                Toast.makeText(WizardSampleActivity.this, size.toString(), Toast.LENGTH_SHORT).show();
+            public void call(PizzaOrder order) {
+                String text = String.format("Deliver %1$s %2$s pizza to %3$s", order.getSize(), order.getType(), order.getPhone());
+                Toast.makeText(WizardSampleActivity.this, text, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -160,6 +178,105 @@ public class WizardSampleActivity extends Activity {
                   }
               }
             );
+        }
+    }
+
+    public static class SubmitOrderFragment extends Fragment {
+        private Pizza mPizza;
+        private Size mSize;
+        private EditText mPhone;
+        private Button mSubmitButton;
+        private Animation mValidateAnim;
+
+        public static SubmitOrderFragment create(Pizza pizza, Size size) {
+            Bundle args = new Bundle();
+            args.putSerializable(Pizza.class.getSimpleName(), pizza);
+            args.putSerializable(Size.class.getSimpleName(), size);
+            SubmitOrderFragment fragment = new SubmitOrderFragment();
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            getActivity().setTitle(R.string.sample_wizard_step3_title);
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View view = inflater.inflate(R.layout.sample_wizard_step3, container, false);
+            Bundle args = getArguments();
+            mPizza = (Pizza) args.getSerializable(Pizza.class.getSimpleName());
+            mSize = (Size) args.getSerializable(Size.class.getSimpleName());
+
+            EditText type = (EditText) view.findViewById(R.id.sample_wizard_step3_type);
+            type.setEnabled(false);
+            type.setText(mPizza.toString());
+
+            EditText size = (EditText) view.findViewById(R.id.sample_wizard_step3_size);
+            size.setEnabled(false);
+            size.setText(mSize.toString());
+
+            mPhone = (EditText) view.findViewById(R.id.sample_wizard_step3_phone);
+            mSubmitButton = (Button) view.findViewById(R.id.submit);
+
+            mValidateAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.validation);
+            return view;
+        }
+
+        public Observable<PizzaOrder> observeOrder() {
+            return ViewObservable.clicks(mSubmitButton)
+              .map(new Func1<OnClickEvent, CharSequence>() {
+                  @Override
+                  public CharSequence call(OnClickEvent onClickEvent) {
+                      return mPhone.getText();
+                  }
+              })
+              .doOnNext(new Action1<CharSequence>() {
+                  @Override
+                  public void call(CharSequence phone) {
+                      if (TextUtils.isEmpty(phone)) {
+                          mPhone.startAnimation(mValidateAnim);
+                      }
+                  }
+              })
+              .filter(new Func1<CharSequence, Boolean>() {
+                  @Override
+                  public Boolean call(CharSequence phone) {
+                      return !TextUtils.isEmpty(phone);
+                  }
+              })
+              .map(new Func1<CharSequence, PizzaOrder>() {
+                  @Override
+                  public PizzaOrder call(CharSequence phone) {
+                      return new PizzaOrder(mPizza, mSize, phone.toString());
+                  }
+              });
+        }
+    }
+
+    public static class PizzaOrder {
+        private Pizza mType;
+        private Size mSize;
+        private String mPhone;
+
+        public PizzaOrder(Pizza type, Size size, String phone) {
+            mType = type;
+            mSize = size;
+            mPhone = phone;
+        }
+
+        public Pizza getType() {
+            return mType;
+        }
+
+        public Size getSize() {
+            return mSize;
+        }
+
+        public String getPhone() {
+            return mPhone;
         }
     }
 }
