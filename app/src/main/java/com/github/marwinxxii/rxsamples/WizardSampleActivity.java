@@ -20,7 +20,7 @@ public class WizardSampleActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sample_pizza);
+        setContentView(R.layout.activity_sample_wizard);
     }
 
     @Override
@@ -86,14 +86,14 @@ public class WizardSampleActivity extends Activity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            ListView view = (ListView) inflater.inflate(R.layout.sample_pizza_step1, container, false);
+            ListView view = (ListView) inflater.inflate(R.layout.sample_wizard_step1, container, false);
             return view;
         }
 
         @Override
         public void onViewCreated(View view, Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
-            ArrayAdapter<Pizza> adapter = new ArrayAdapter<Pizza>(getActivity(), R.layout.sample_pizza_item, android.R.id.title, Pizza.values()) {
+            ArrayAdapter<Pizza> adapter = new ArrayAdapter<Pizza>(getActivity(), R.layout.sample_wizard_item, android.R.id.title, Pizza.values()) {
                 @Override
                 public View getView(int position, View convertView, ViewGroup parent) {
                     View result = super.getView(position, convertView, parent);
@@ -128,7 +128,7 @@ public class WizardSampleActivity extends Activity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.sample_pizza_step2, container, false);
+            View view = inflater.inflate(R.layout.sample_wizard_step2, container, false);
             RadioGroup sizes = (RadioGroup) view.findViewById(R.id.sample_wizard_step2_sizes);
             sizes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
