@@ -34,17 +34,17 @@ public class WizardSampleActivity extends Activity {
                   return selectPizzaFragment.observeSelectedPizza();
               }
           })
-          .flatMap(new Func1<Pizza, Observable<Integer>>() {
+          .flatMap(new Func1<Pizza, Observable<Size>>() {
               @Override
-              public Observable<Integer> call(Pizza pizza) {
+              public Observable<Size> call(Pizza pizza) {
                   SelectSizeFragment selectSizeFragment = new SelectSizeFragment();
                   showFragment(selectSizeFragment, true);
                   return selectSizeFragment.observeSelectedSize();
               }
-          }).subscribe(new Action1<Integer>() {
+          }).subscribe(new Action1<Size>() {
             @Override
-            public void call(Integer integer) {
-                Toast.makeText(WizardSampleActivity.this, getResources().getResourceName(integer), Toast.LENGTH_SHORT).show();
+            public void call(Size size) {
+                Toast.makeText(WizardSampleActivity.this, size.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -71,6 +71,10 @@ public class WizardSampleActivity extends Activity {
         Pizza(int drawableId) {
             this.drawableId = drawableId;
         }
+    }
+
+    public static enum Size {
+        STANDARD, BIG, SUPER_BIG
     }
 
     public static class SelectPizzaFragment extends ListFragment {
@@ -111,7 +115,7 @@ public class WizardSampleActivity extends Activity {
             });//TODO restart observable
         }
     }
-    
+
     public static class SelectSizeFragment extends Fragment {
         private PublishSubject<Integer> mSizeSubject = PublishSubject.create();
         private Observable<OnClickEvent> mNextClickObservable;
@@ -136,16 +140,23 @@ public class WizardSampleActivity extends Activity {
             mNextClickObservable = ViewObservable.clicks(nextButton);
             return view;
         }
-        
-        public Observable<Integer> observeSelectedSize() {
+
+        public Observable<Size> observeSelectedSize() {
             return Observable.zip(
               mNextClickObservable,
               mSizeSubject,
 
-              new Func2<OnClickEvent, Integer, Integer>() {
+              new Func2<OnClickEvent, Integer, Size>() {
                   @Override
-                  public Integer call(OnClickEvent onClickEvent, Integer size) {
-                      return size;
+                  public Size call(OnClickEvent onClickEvent, Integer radioButtonId) {
+                      switch (radioButtonId) {
+                          case R.id.pizza_size_big:
+                              return Size.BIG;
+                          case R.id.pizza_size_super_big:
+                              return Size.SUPER_BIG;
+                          default:
+                              return Size.STANDARD;
+                      }
                   }
               }
             );
