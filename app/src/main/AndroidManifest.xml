@@ -26,7 +26,7 @@
             android:label="@string/sample_email" />
 
         <activity
-            android:name=".WizardSampleActivity"
+            android:name=".wizard.WizardSampleActivity"
             android:label="@string/sample_wizard" />
     </application>
 

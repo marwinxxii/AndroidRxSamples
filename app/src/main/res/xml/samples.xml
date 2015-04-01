@@ -12,7 +12,7 @@
     </Preference>
     <Preference android:title="@string/sample_wizard">
         <intent
-            android:targetClass="com.github.marwinxxii.rxsamples.WizardSampleActivity"
+            android:targetClass="com.github.marwinxxii.rxsamples.wizard.WizardSampleActivity"
             android:targetPackage="@string/app_id" />
     </Preference>
 </PreferenceScreen>
