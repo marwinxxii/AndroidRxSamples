@@ -6,14 +6,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import com.github.marwinxxii.rxsamples.R;
 import rx.Observable;
-import rx.android.view.OnClickEvent;
 import rx.android.view.ViewObservable;
+import rx.android.widget.OnTextChangeEvent;
+import rx.android.widget.WidgetObservable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -22,7 +21,6 @@ public class SubmitOrderFragment extends Fragment {
     private Size mSize;
     private EditText mPhone;
     private Button mSubmitButton;
-    private Animation mValidateAnim;
 
     public static SubmitOrderFragment create(Pizza pizza, Size size) {
         Bundle args = new Bundle();
@@ -57,36 +55,22 @@ public class SubmitOrderFragment extends Fragment {
         mPhone = (EditText) view.findViewById(R.id.sample_wizard_step3_phone);
         mSubmitButton = (Button) view.findViewById(R.id.submit);
 
-        mValidateAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.validation);
         return view;
     }
 
     public Observable<PizzaOrder> observeOrder() {
-        return ViewObservable.clicks(mSubmitButton)
-          .map(new Func1<OnClickEvent, CharSequence>() {
+        return WidgetObservable.text(mPhone)
+          .doOnNext(new Action1<OnTextChangeEvent>() {
               @Override
-              public CharSequence call(OnClickEvent onClickEvent) {
-                  return mPhone.getText();
+              public void call(OnTextChangeEvent onPhoneChangeEvent) {
+                  mSubmitButton.setEnabled(!TextUtils.isEmpty(onPhoneChangeEvent.text()));
               }
           })
-          .doOnNext(new Action1<CharSequence>() {
+          .sample(ViewObservable.clicks(mSubmitButton))
+          .map(new Func1<OnTextChangeEvent, PizzaOrder>() {
               @Override
-              public void call(CharSequence phone) {
-                  if (TextUtils.isEmpty(phone)) {
-                      mPhone.startAnimation(mValidateAnim);
-                  }
-              }
-          })
-          .filter(new Func1<CharSequence, Boolean>() {
-              @Override
-              public Boolean call(CharSequence phone) {
-                  return !TextUtils.isEmpty(phone);
-              }
-          })
-          .map(new Func1<CharSequence, PizzaOrder>() {
-              @Override
-              public PizzaOrder call(CharSequence phone) {
-                  return new PizzaOrder(mPizza, mSize, phone.toString());
+              public PizzaOrder call(OnTextChangeEvent onPhoneChangeEvent) {
+                  return new PizzaOrder(mPizza, mSize, onPhoneChangeEvent.text().toString());
               }
           });
     }
