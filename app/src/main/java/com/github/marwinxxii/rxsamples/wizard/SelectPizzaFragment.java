@@ -1,6 +1,5 @@
 package com.github.marwinxxii.rxsamples.wizard;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,7 @@ import rx.android.widget.OnItemClickEvent;
 import rx.android.widget.WidgetObservable;
 import rx.functions.Func1;
 
-public class SelectPizzaFragment extends Fragment {
+public class SelectPizzaFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
@@ -39,12 +38,19 @@ public class SelectPizzaFragment extends Fragment {
     }
 
     public Observable<Pizza> observeSelectedPizza() {
-        final ListView lv = (ListView) getView();
-        return WidgetObservable.itemClicks(lv).map(new Func1<OnItemClickEvent, Pizza>() {
+        return observeViewCreated().flatMap(new Func1<Void, Observable<Pizza>>() {
             @Override
-            public Pizza call(OnItemClickEvent onItemClickEvent) {
-                return (Pizza) lv.getItemAtPosition(onItemClickEvent.position());
+            public Observable<Pizza> call(Void aVoid) {
+                final ListView lv = (ListView) getView();
+                return WidgetObservable.itemClicks(lv)
+                  .map(new Func1<OnItemClickEvent, Pizza>() {
+                      @Override
+                      public Pizza call(OnItemClickEvent onItemClickEvent) {
+                          return (Pizza) lv.getItemAtPosition(onItemClickEvent.position());
+                      }
+                  })
+                  .first();
             }
-        });//TODO restart observable
+        });
     }
 }

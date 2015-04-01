@@ -1,6 +1,5 @@
 package com.github.marwinxxii.rxsamples.wizard;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import rx.android.widget.WidgetObservable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-public class SubmitOrderFragment extends Fragment {
+public class SubmitOrderFragment extends BaseFragment {
     private Pizza mPizza;
     private Size mSize;
     private EditText mPhone;
@@ -59,19 +58,25 @@ public class SubmitOrderFragment extends Fragment {
     }
 
     public Observable<PizzaOrder> observeOrder() {
-        return WidgetObservable.text(mPhone)
-          .doOnNext(new Action1<OnTextChangeEvent>() {
-              @Override
-              public void call(OnTextChangeEvent onPhoneChangeEvent) {
-                  mSubmitButton.setEnabled(!TextUtils.isEmpty(onPhoneChangeEvent.text()));
-              }
-          })
-          .sample(ViewObservable.clicks(mSubmitButton))
-          .map(new Func1<OnTextChangeEvent, PizzaOrder>() {
-              @Override
-              public PizzaOrder call(OnTextChangeEvent onPhoneChangeEvent) {
-                  return new PizzaOrder(mPizza, mSize, onPhoneChangeEvent.text().toString());
-              }
-          });
+        return observeViewCreated().flatMap(new Func1<Void, Observable<PizzaOrder>>() {
+            @Override
+            public Observable<PizzaOrder> call(Void aVoid) {
+                return WidgetObservable.text(mPhone)
+                  .doOnNext(new Action1<OnTextChangeEvent>() {
+                      @Override
+                      public void call(OnTextChangeEvent onPhoneChangeEvent) {
+                          mSubmitButton.setEnabled(!TextUtils.isEmpty(onPhoneChangeEvent.text()));
+                      }
+                  })
+                  .sample(ViewObservable.clicks(mSubmitButton))
+                  .map(new Func1<OnTextChangeEvent, PizzaOrder>() {
+                      @Override
+                      public PizzaOrder call(OnTextChangeEvent onPhoneChangeEvent) {
+                          return new PizzaOrder(mPizza, mSize, onPhoneChangeEvent.text().toString());
+                      }
+                  })
+                  .first();
+            }
+        });
     }
 }

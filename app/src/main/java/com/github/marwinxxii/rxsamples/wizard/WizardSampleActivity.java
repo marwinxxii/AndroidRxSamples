@@ -64,7 +64,5 @@ public class WizardSampleActivity extends Activity {
             transaction.addToBackStack(fragment.getClass().getSimpleName());
         }
         transaction.commit();
-        fm.executePendingTransactions();//TODO remove
     }
-
 }
