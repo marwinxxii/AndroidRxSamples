@@ -8,14 +8,13 @@ import android.view.ViewGroup;
 import android.widget.RadioGroup;
 import com.github.marwinxxii.rxsamples.R;
 import rx.Observable;
-import rx.android.view.OnClickEvent;
 import rx.android.view.ViewObservable;
-import rx.functions.Func2;
+import rx.functions.Func1;
 import rx.subjects.PublishSubject;
 
 public class SelectSizeFragment extends Fragment {
     private PublishSubject<Integer> mSizeSubject = PublishSubject.create();
-    private Observable<OnClickEvent> mNextClickObservable;
+    private View mNextButton;
 
     @Override
     public void onResume() {
@@ -30,32 +29,33 @@ public class SelectSizeFragment extends Fragment {
         sizes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                mNextButton.setEnabled(true);//could be done with doOnNext on mSizeSubject
                 mSizeSubject.onNext(checkedId);
             }
         });
-        View nextButton = view.findViewById(R.id.next);
-        mNextClickObservable = ViewObservable.clicks(nextButton);
+        mNextButton = view.findViewById(R.id.next);
         return view;
     }
 
     public Observable<Size> observeSelectedSize() {
-        return Observable.zip(
-          mNextClickObservable,
-          mSizeSubject,
-
-          new Func2<OnClickEvent, Integer, Size>() {
+        //note that if check once and click twice, after second click new item WON'T me emitted
+        return mSizeSubject.sample(ViewObservable.clicks(mNextButton))
+          .map(new Func1<Integer, Size>() {
               @Override
-              public Size call(OnClickEvent onClickEvent, Integer radioButtonId) {
-                  switch (radioButtonId) {
-                      case R.id.pizza_size_big:
-                          return Size.BIG;
-                      case R.id.pizza_size_super_big:
-                          return Size.SUPER_BIG;
-                      default:
-                          return Size.STANDARD;
-                  }
+              public Size call(Integer checkedId) {
+                  return parseCheckedSize(checkedId);
               }
-          }
-        );
+          });
+    }
+
+    private static Size parseCheckedSize(int checkedId) {
+        switch (checkedId) {
+            case R.id.pizza_size_big:
+                return Size.BIG;
+            case R.id.pizza_size_super_big:
+                return Size.SUPER_BIG;
+            default:
+                return Size.STANDARD;
+        }
     }
 }
