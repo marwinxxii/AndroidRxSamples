@@ -7,6 +7,7 @@ import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
 public abstract class BaseFragment extends Fragment {
+    //behavior subject is needed to ensure that subscriber will receive item even if subscribed after view creation
     private final BehaviorSubject<BaseFragment> mViewCreatedSubject = BehaviorSubject.create();
 
     @Override
