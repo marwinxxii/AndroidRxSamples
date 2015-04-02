@@ -62,7 +62,7 @@ public class WizardSampleActivity extends Activity {
           .subscribe(new Action1<PizzaOrder>() {
               @Override
               public void call(PizzaOrder order) {
-                  String text = String.format("Deliver %1$s %2$s pizza to %3$s", order.getSize(), order.getType(), order.getPhone());
+                  String text = getString(R.string.sample_wizard_result, order.getSize(), order.getType(), order.getPhone());
                   Toast.makeText(WizardSampleActivity.this, text, Toast.LENGTH_SHORT).show();
               }
           });

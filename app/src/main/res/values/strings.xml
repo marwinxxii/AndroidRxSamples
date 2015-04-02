@@ -20,6 +20,7 @@
     <string name="sample_wizard_step3_type_label">Pizza:</string>
     <string name="sample_wizard_step3_size_label">Size:</string>
     <string name="sample_wizard_step3_phone_label">Enter your phone:</string>
+    <string name="sample_wizard_result">Deliver %1$s %2$s pizza, call back to %3$s</string>
     <string name="submit">Submit</string>
 
     <string-array name="domains">
