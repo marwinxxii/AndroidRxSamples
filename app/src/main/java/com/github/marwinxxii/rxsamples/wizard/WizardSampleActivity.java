@@ -1,9 +1,11 @@
 package com.github.marwinxxii.rxsamples.wizard;
 
-import android.app.*;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Pair;
-import android.widget.*;
+import android.widget.Toast;
 import com.github.marwinxxii.rxsamples.R;
 import rx.Observable;
 import rx.functions.Action1;
@@ -19,33 +21,46 @@ public class WizardSampleActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();//TODO in onCreate
-        Observable.just(new SelectPizzaFragment())
+        observeFragmentShown(new SelectPizzaFragment(), false)
           .flatMap(new Func1<SelectPizzaFragment, Observable<Pizza>>() {
               @Override
               public Observable<Pizza> call(SelectPizzaFragment selectPizzaFragment) {
-                  showFragment(selectPizzaFragment, false);
-                  return selectPizzaFragment.observeSelectedPizza();
+                  return selectPizzaFragment.observeSelectedPizza().first();
               }
           })
           .flatMap(new Func1<Pizza, Observable<Pair<Pizza, Size>>>() {
               @Override
               public Observable<Pair<Pizza, Size>> call(final Pizza pizza) {
-                  SelectSizeFragment selectSizeFragment = new SelectSizeFragment();
-                  showFragment(selectSizeFragment, true);
-                  return selectSizeFragment.observeSelectedSize().map(new Func1<Size, Pair<Pizza, Size>>() {
-                      @Override
-                      public Pair<Pizza, Size> call(Size size) {
-                          return new Pair<>(pizza, size);
-                      }
-                  });
+                  /* view is created each time fragment is shown (first time, pop from back stack)
+                  fragment is not recreated after popping from back stack
+                  flatMap ensures that on each view create we observe results from new view */
+                  return observeFragmentShown(new SelectSizeFragment(), true)
+                    .flatMap(new Func1<SelectSizeFragment, Observable<Pair<Pizza, Size>>>() {
+                        @Override
+                        public Observable<Pair<Pizza, Size>> call(SelectSizeFragment selectSizeFragment) {
+                            return selectSizeFragment
+                              .observeSelectedSize()
+                              .map(new Func1<Size, Pair<Pizza, Size>>() {
+                                  @Override
+                                  public Pair<Pizza, Size> call(Size size) {
+                                      return new Pair<>(pizza, size);
+                                  }
+                              })
+                              .first();//prevents leaking of views and fragment inside persistent sequence
+                        }
+                    });
               }
           })
           .flatMap(new Func1<Pair<Pizza, Size>, Observable<PizzaOrder>>() {
               @Override
               public Observable<PizzaOrder> call(Pair<Pizza, Size> params) {
-                  SubmitOrderFragment submitFragment = SubmitOrderFragment.create(params.first, params.second);
-                  showFragment(submitFragment, true);
-                  return submitFragment.observeOrder();
+                  return observeFragmentShown(SubmitOrderFragment.create(params.first, params.second), true)
+                    .flatMap(new Func1<SubmitOrderFragment, Observable<PizzaOrder>>() {
+                        @Override
+                        public Observable<PizzaOrder> call(SubmitOrderFragment submitOrderFragment) {
+                            return submitOrderFragment.observeOrder().first();
+                        }
+                    });
               }
           }).subscribe(new Action1<PizzaOrder>() {
             @Override
@@ -56,7 +71,7 @@ public class WizardSampleActivity extends Activity {
         });
     }
 
-    private void showFragment(Fragment fragment, boolean addToBackStack) {
+    private <T extends BaseFragment> Observable<T> observeFragmentShown(T fragment, boolean addToBackStack) {
         FragmentManager fm = getFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction()
           .replace(android.R.id.content, fragment);
@@ -64,5 +79,6 @@ public class WizardSampleActivity extends Activity {
             transaction.addToBackStack(fragment.getClass().getSimpleName());
         }
         transaction.commit();
+        return fragment.observeViewCreated();
     }
 }

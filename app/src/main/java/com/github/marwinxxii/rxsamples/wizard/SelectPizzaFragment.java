@@ -38,19 +38,13 @@ public class SelectPizzaFragment extends BaseFragment {
     }
 
     public Observable<Pizza> observeSelectedPizza() {
-        return observeViewCreated().flatMap(new Func1<Void, Observable<Pizza>>() {
-            @Override
-            public Observable<Pizza> call(Void aVoid) {
-                final ListView lv = (ListView) getView();
-                return WidgetObservable.itemClicks(lv)
-                  .map(new Func1<OnItemClickEvent, Pizza>() {
-                      @Override
-                      public Pizza call(OnItemClickEvent onItemClickEvent) {
-                          return (Pizza) lv.getItemAtPosition(onItemClickEvent.position());
-                      }
-                  })
-                  .first();
-            }
-        });
+        final ListView lv = (ListView) getView();
+        return WidgetObservable.itemClicks(lv)
+          .map(new Func1<OnItemClickEvent, Pizza>() {
+              @Override
+              public Pizza call(OnItemClickEvent onItemClickEvent) {
+                  return (Pizza) lv.getItemAtPosition(onItemClickEvent.position());
+              }
+          });
     }
 }

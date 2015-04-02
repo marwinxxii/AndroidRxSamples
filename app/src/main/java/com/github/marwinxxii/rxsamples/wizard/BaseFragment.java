@@ -7,15 +7,21 @@ import rx.Observable;
 import rx.subjects.BehaviorSubject;
 
 public abstract class BaseFragment extends Fragment {
-    private final BehaviorSubject<Void> mViewCreatedSubject = BehaviorSubject.create();
+    private final BehaviorSubject<BaseFragment> mViewCreatedSubject = BehaviorSubject.create();
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewCreatedSubject.onNext(null);
+        mViewCreatedSubject.onNext(this);
     }
 
-    protected Observable<Void> observeViewCreated() {
-        return mViewCreatedSubject;
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mViewCreatedSubject.onCompleted();
+    }
+
+    protected <T extends BaseFragment> Observable<T> observeViewCreated() {
+        return (Observable<T>) mViewCreatedSubject;
     }
 }

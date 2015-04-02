@@ -58,25 +58,19 @@ public class SubmitOrderFragment extends BaseFragment {
     }
 
     public Observable<PizzaOrder> observeOrder() {
-        return observeViewCreated().flatMap(new Func1<Void, Observable<PizzaOrder>>() {
-            @Override
-            public Observable<PizzaOrder> call(Void aVoid) {
-                return WidgetObservable.text(mPhone)
-                  .doOnNext(new Action1<OnTextChangeEvent>() {
-                      @Override
-                      public void call(OnTextChangeEvent onPhoneChangeEvent) {
-                          mSubmitButton.setEnabled(!TextUtils.isEmpty(onPhoneChangeEvent.text()));
-                      }
-                  })
-                  .sample(ViewObservable.clicks(mSubmitButton))
-                  .map(new Func1<OnTextChangeEvent, PizzaOrder>() {
-                      @Override
-                      public PizzaOrder call(OnTextChangeEvent onPhoneChangeEvent) {
-                          return new PizzaOrder(mPizza, mSize, onPhoneChangeEvent.text().toString());
-                      }
-                  })
-                  .first();
-            }
-        });
+        return WidgetObservable.text(mPhone)
+          .doOnNext(new Action1<OnTextChangeEvent>() {
+              @Override
+              public void call(OnTextChangeEvent onPhoneChangeEvent) {
+                  mSubmitButton.setEnabled(!TextUtils.isEmpty(onPhoneChangeEvent.text()));
+              }
+          })
+          .sample(ViewObservable.clicks(mSubmitButton))
+          .map(new Func1<OnTextChangeEvent, PizzaOrder>() {
+              @Override
+              public PizzaOrder call(OnTextChangeEvent onPhoneChangeEvent) {
+                  return new PizzaOrder(mPizza, mSize, onPhoneChangeEvent.text().toString());
+              }
+          });
     }
 }

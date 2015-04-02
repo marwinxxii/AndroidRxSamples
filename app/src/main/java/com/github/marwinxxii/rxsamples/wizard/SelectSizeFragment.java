@@ -37,20 +37,14 @@ public class SelectSizeFragment extends BaseFragment {
     }
 
     public Observable<Size> observeSelectedSize() {
-        return observeViewCreated().flatMap(new Func1<Void, Observable<Size>>() {
-            @Override
-            public Observable<Size> call(Void aVoid) {
-                //note that if check once and click twice, after second click new item WON'T me emitted
-                return mSizeSubject.sample(ViewObservable.clicks(mNextButton))
-                  .map(new Func1<Integer, Size>() {
-                      @Override
-                      public Size call(Integer checkedId) {
-                          return parseCheckedSize(checkedId);
-                      }
-                  })
-                  .first();
-            }
-        });
+        //note that if check once and click twice, after second click new item WON'T me emitted
+        return mSizeSubject.sample(ViewObservable.clicks(mNextButton))
+          .map(new Func1<Integer, Size>() {
+              @Override
+              public Size call(Integer checkedId) {
+                  return parseCheckedSize(checkedId);
+              }
+          });
     }
 
     private static Size parseCheckedSize(int checkedId) {
