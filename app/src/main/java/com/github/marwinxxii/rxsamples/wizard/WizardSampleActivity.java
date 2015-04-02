@@ -16,11 +16,7 @@ public class WizardSampleActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_wizard);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();//TODO in onCreate
         observeFragmentShown(new SelectPizzaFragment(), false)
           .flatMap(new Func1<SelectPizzaFragment, Observable<Pizza>>() {
               @Override
@@ -62,13 +58,14 @@ public class WizardSampleActivity extends Activity {
                         }
                     });
               }
-          }).subscribe(new Action1<PizzaOrder>() {
-            @Override
-            public void call(PizzaOrder order) {
-                String text = String.format("Deliver %1$s %2$s pizza to %3$s", order.getSize(), order.getType(), order.getPhone());
-                Toast.makeText(WizardSampleActivity.this, text, Toast.LENGTH_SHORT).show();
-            }
-        });
+          })
+          .subscribe(new Action1<PizzaOrder>() {
+              @Override
+              public void call(PizzaOrder order) {
+                  String text = String.format("Deliver %1$s %2$s pizza to %3$s", order.getSize(), order.getType(), order.getPhone());
+                  Toast.makeText(WizardSampleActivity.this, text, Toast.LENGTH_SHORT).show();
+              }
+          });
     }
 
     private <T extends BaseFragment> Observable<T> observeFragmentShown(T fragment, boolean addToBackStack) {
