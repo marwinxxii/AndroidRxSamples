@@ -14,4 +14,6 @@
         <item>rxmail.io</item>
         <item>reactivemail.net</item>
     </string-array>
+    
+    <string name="deep_link_scheme">sample</string>
 </resources>

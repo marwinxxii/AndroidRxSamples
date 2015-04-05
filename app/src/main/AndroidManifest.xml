@@ -19,11 +19,35 @@
 
         <activity
             android:name=".EditTextSampleActivity"
-            android:label="@string/sample_edittext" />
+            android:label="@string/sample_edittext">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="${applicationId}"
+                    android:path="/edittexts"
+                    android:scheme="@string/deep_link_scheme" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".EmailSampleActivity"
-            android:label="@string/sample_email" />
+            android:label="@string/sample_email">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="${applicationId}"
+                    android:path="/email"
+                    android:scheme="@string/deep_link_scheme" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
