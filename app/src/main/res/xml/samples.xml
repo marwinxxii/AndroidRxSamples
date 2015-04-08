@@ -15,4 +15,9 @@
             android:targetClass="com.github.marwinxxii.rxsamples.wizard.WizardSampleActivity"
             android:targetPackage="@string/app_id" />
     </Preference>
+    <Preference android:title="@string/sample_wizard_views">
+        <intent
+            android:targetClass="com.github.marwinxxii.rxsamples.wizard.views.WizardViewsSampleActivity"
+            android:targetPackage="@string/app_id" />
+    </Preference>
 </PreferenceScreen>

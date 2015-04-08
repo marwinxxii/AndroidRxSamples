@@ -28,6 +28,10 @@
         <activity
             android:name=".wizard.WizardSampleActivity"
             android:label="@string/sample_wizard" />
+
+        <activity
+            android:name=".wizard.views.WizardViewsSampleActivity"
+            android:label="@string/sample_wizard_views" />
     </application>
 
 </manifest>
