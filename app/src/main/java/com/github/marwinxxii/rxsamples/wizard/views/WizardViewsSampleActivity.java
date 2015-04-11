@@ -74,35 +74,21 @@ public class WizardViewsSampleActivity extends Activity {
     }
 
     private void show(View view) {
-        if (view instanceof SubmitOrderView) {
-            mSelectSizeView.setVisibility(View.GONE);
-        } else if (view instanceof SelectSizeView) {
-            mSelectPizzaView.setVisibility(View.GONE);
-        } else {
+        if (mBackStack.size() != 0) {
+            mBackStack.peek().setVisibility(View.GONE);
         }
         view.setVisibility(View.VISIBLE);
         mBackStack.push(view);
     }
 
-    private void onBackStackChange() {
-        View view = mBackStack.pop();
-        if (view == null) {
-            WizardViewsSampleActivity.super.onBackPressed();
-            return;
-        }
-        if (view instanceof SubmitOrderView) {
-            view.setVisibility(View.GONE);
-            mSelectSizeView.setVisibility(View.VISIBLE);
-        } else if (view instanceof SelectSizeView) {
-            view.setVisibility(View.GONE);
-            mSelectPizzaView.setVisibility(View.VISIBLE);
-        } else {
-            WizardViewsSampleActivity.super.onBackPressed();
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        onBackStackChange();
+        View view = mBackStack.pop();
+        if (mBackStack.size() == 0) {
+            super.onBackPressed();
+        } else {
+            view.setVisibility(View.GONE);
+            mBackStack.peek().setVisibility(View.VISIBLE);
+        }
     }
 }
