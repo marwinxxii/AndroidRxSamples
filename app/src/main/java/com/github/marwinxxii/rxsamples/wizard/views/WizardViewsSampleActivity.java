@@ -12,8 +12,6 @@ import com.github.marwinxxii.rxsamples.wizard.Size;
 import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.functions.Func2;
-import rx.subjects.PublishSubject;
 
 import java.util.ArrayDeque;
 
@@ -21,9 +19,8 @@ public class WizardViewsSampleActivity extends Activity {
     private SelectPizzaView mSelectPizzaView;
     private SelectSizeView mSelectSizeView;
     private SubmitOrderView mSubmitOrderView;
-    
-    private PublishSubject<View> mBackStackSubject = PublishSubject.create();
-    private PublishSubject<Void> mBackPressSubject = PublishSubject.create();
+
+    private ArrayDeque<View> mBackStack = new ArrayDeque<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,26 +71,8 @@ public class WizardViewsSampleActivity extends Activity {
                   Toast.makeText(WizardViewsSampleActivity.this, text, Toast.LENGTH_SHORT).show();
               }
           });
-        
-        /*Observable.zip(
-          mBackStackSubject,
-          mBackPressSubject,
-
-          new Func2<View, Void, View>() {
-              @Override
-              public View call(View view, Void aVoid) {
-                  return view;
-              }
-          }
-        ).subscribe(new Action1<View>() {
-            @Override
-            public void call(View view) {
-                onBackStackChange(view);
-            }
-        });*/
     }
-    
-    private ArrayDeque<View> mBackStack = new ArrayDeque<>();
+
     private void show(View view) {
         if (view instanceof SubmitOrderView) {
             mSelectSizeView.setVisibility(View.GONE);
@@ -103,9 +82,8 @@ public class WizardViewsSampleActivity extends Activity {
         }
         view.setVisibility(View.VISIBLE);
         mBackStack.push(view);
-        //mBackStackSubject.onNext(view);
     }
-    
+
     private void onBackStackChange() {
         View view = mBackStack.pop();
         if (view == null) {
@@ -125,7 +103,6 @@ public class WizardViewsSampleActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        //mBackPressSubject.onNext(null);
         onBackStackChange();
     }
 }
