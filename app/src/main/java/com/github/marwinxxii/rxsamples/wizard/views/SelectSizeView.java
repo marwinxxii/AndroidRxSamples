@@ -18,7 +18,8 @@ import rx.subjects.PublishSubject;
 public class SelectSizeView extends FrameLayout implements IWizardStepView {
     private PublishSubject<Integer> mSizeSubject = PublishSubject.create();
     private View mNextButton;
-    
+    private RadioGroup mSizes;
+
     public SelectSizeView(Context context) {
         super(context);
         init();
@@ -45,8 +46,8 @@ public class SelectSizeView extends FrameLayout implements IWizardStepView {
     
     private void init() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.sample_wizard_step2, this, true);
-        RadioGroup sizes = (RadioGroup) view.findViewById(R.id.sample_wizard_step2_sizes);
-        sizes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mSizes = (RadioGroup) view.findViewById(R.id.sample_wizard_step2_sizes);
+        mSizes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 mNextButton.setEnabled(true);//could be done with doOnNext on mSizeSubject
@@ -60,9 +61,14 @@ public class SelectSizeView extends FrameLayout implements IWizardStepView {
     public CharSequence getStepTitle() {
         return getResources().getString(R.string.sample_wizard_step2_title);
     }
-    
+
+    @Override
+    public void reset() {
+        mSizes.clearCheck();
+    }
+
     public Observable<Size> observeSelectedSize() {
-        //note that if check once and click twice, after second click new item WON'T me emitted
+        //note that if check once and click twice, after second click new item WON'T be emitted
         return mSizeSubject.sample(ViewObservable.clicks(mNextButton))
           .map(new Func1<Integer, Size>() {
               @Override

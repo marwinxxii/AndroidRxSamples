@@ -71,6 +71,13 @@ public class SubmitOrderView extends FrameLayout implements IWizardStepView {
         return getResources().getString(R.string.sample_wizard_step3_title);
     }
 
+    @Override
+    public void reset() {
+        mEditType.setText("");
+        mEditSize.setText("");
+        mPhone.setText("");
+    }
+
     public SubmitOrderView setPizza(Pizza pizza) {
         mPizza = pizza;
         mEditType.setText(pizza.toString());

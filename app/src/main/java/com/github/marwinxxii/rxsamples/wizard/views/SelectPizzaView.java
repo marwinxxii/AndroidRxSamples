@@ -67,6 +67,10 @@ public class SelectPizzaView extends FrameLayout implements IWizardStepView {
         return getResources().getString(R.string.sample_wizard_step1_title);
     }
 
+    @Override
+    public void reset() {
+    }
+
     public Observable<Pizza> observeSelectedPizza() {
         return WidgetObservable.itemClicks(mListView)
           .map(new Func1<OnItemClickEvent, Pizza>() {
