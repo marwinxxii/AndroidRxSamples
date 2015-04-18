@@ -10,4 +10,9 @@
             android:targetClass="com.github.marwinxxii.rxsamples.EditTextSampleActivity"
             android:targetPackage="@string/app_id" />
     </Preference>
+    <Preference android:title="@string/sample_mix">
+        <intent
+            android:targetClass="com.github.marwinxxii.rxsamples.MixSampleActivity"
+            android:targetPackage="@string/app_id" />
+    </Preference>
 </PreferenceScreen>

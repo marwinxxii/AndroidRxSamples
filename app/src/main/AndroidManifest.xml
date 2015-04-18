@@ -48,6 +48,21 @@
                     android:scheme="@string/deep_link_scheme" />
             </intent-filter>
         </activity>
+        
+        <activity android:name=".MixSampleActivity"
+            android:label="@string/sample_mix">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="${applicationId}"
+                    android:path="/mix"
+                    android:scheme="@string/deep_link_scheme" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
