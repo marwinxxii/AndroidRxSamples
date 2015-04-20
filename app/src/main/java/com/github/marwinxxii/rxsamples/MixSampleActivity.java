@@ -27,6 +27,7 @@ public class MixSampleActivity extends Activity {
         result.setEnabled(false);
         final ProgressBar progress = (ProgressBar) findViewById(android.R.id.progress);
 
+        //NOTE: this sample doesn't handle orientation change and other activity recreation cases
         ViewObservable.clicks(calculateBtn)
           .doOnNext(new Action1<OnClickEvent>() {
               @Override
@@ -40,8 +41,8 @@ public class MixSampleActivity extends Activity {
               @Override
               public Observable<Integer> call(OnClickEvent onClickEvent) {
                   return observeLongApiCall()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(new Action1<Throwable>() {
+                    .observeOn(AndroidSchedulers.mainThread())//interaction with UI must be performed on main thread
+                    .doOnError(new Action1<Throwable>() {//handle error before it will be suppressed
                         @Override
                         public void call(Throwable throwable) {
                             progress.setVisibility(View.GONE);
@@ -49,10 +50,11 @@ public class MixSampleActivity extends Activity {
                             Toast.makeText(MixSampleActivity.this, R.string.mix_error_message, Toast.LENGTH_SHORT).show();
                         }
                     })
-                    .onErrorResumeNext(Observable.<Integer>empty());
+                    .onErrorResumeNext(Observable.<Integer>empty());//prevent observable from breaking
               }
           })
           .subscribe(new Action1<Integer>() {
+              //not handling errors, because they are handled for API calls, and normally no other errors should appear
               @Override
               public void call(Integer integer) {
                   progress.setVisibility(View.GONE);
@@ -64,7 +66,7 @@ public class MixSampleActivity extends Activity {
 
     private static Observable<Integer> observeLongApiCall() {
         return Observable.just(new Random().nextInt())
-          .delay(3L, TimeUnit.SECONDS)
+          .delay(3L, TimeUnit.SECONDS)//by default operates on computation Scheduler
           .doOnNext(new Action1<Integer>() {
               @Override
               public void call(Integer integer) {
