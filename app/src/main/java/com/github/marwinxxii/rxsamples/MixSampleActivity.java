@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.android.view.OnClickEvent;
 import rx.android.view.ViewObservable;
@@ -18,6 +19,8 @@ import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class MixSampleActivity extends Activity {
+    private Subscription mSubscription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +30,8 @@ public class MixSampleActivity extends Activity {
         result.setEnabled(false);
         final ProgressBar progress = (ProgressBar) findViewById(android.R.id.progress);
 
-        //NOTE: this sample doesn't handle orientation change and other activity recreation cases
-        ViewObservable.clicks(calculateBtn)
+        //NOTE: this sample doesn't handle orientation change and other activity restore cases
+        mSubscription = ViewObservable.clicks(calculateBtn)
           .doOnNext(new Action1<OnClickEvent>() {
               @Override
               public void call(OnClickEvent onClickEvent) {
@@ -62,6 +65,12 @@ public class MixSampleActivity extends Activity {
                   result.setText(integer.toString());
               }
           });
+    }
+
+    @Override
+    protected void onStop() {
+        mSubscription.unsubscribe();//prevent leaking of activity
+        super.onStop();
     }
 
     private static Observable<Integer> observeLongApiCall() {
