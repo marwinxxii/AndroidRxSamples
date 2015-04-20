@@ -48,9 +48,11 @@
                     android:scheme="@string/deep_link_scheme" />
             </intent-filter>
         </activity>
-        
-        <activity android:name=".MixSampleActivity"
-            android:label="@string/sample_mix">
+
+        <activity
+            android:name=".MixSampleActivity"
+            android:label="@string/sample_mix"
+            android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
