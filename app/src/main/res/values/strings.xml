@@ -17,7 +17,7 @@
     
     <string name="deep_link_scheme">sample</string>
     <string name="mix_result_label">Calculated random value:</string>
-    <string name="sample_mix">Mix observables sample</string>
+    <string name="sample_io_combine">Combining UI and I/O observables</string>
     <string name="mix_calculate">Calculate next random value</string>
     <string name="mix_result">Calculated value</string>
     <string name="mix_error_message">Handling occurred error</string>
