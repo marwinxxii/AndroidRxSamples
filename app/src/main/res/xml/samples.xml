@@ -12,7 +12,7 @@
     </Preference>
     <Preference android:title="@string/sample_io_combine">
         <intent
-            android:targetClass="com.github.marwinxxii.rxsamples.IOCombineSampleActivity"
+            android:targetClass="com.github.marwinxxii.rxsamples.CombineIOSampleActivity"
             android:targetPackage="@string/app_id" />
     </Preference>
 </PreferenceScreen>

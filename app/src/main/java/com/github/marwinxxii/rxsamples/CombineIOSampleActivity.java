@@ -18,7 +18,7 @@ import rx.functions.Func1;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class IOCombineSampleActivity extends Activity {
+public class CombineIOSampleActivity extends Activity {
     private Subscription mSubscription;
 
     @Override
@@ -50,7 +50,7 @@ public class IOCombineSampleActivity extends Activity {
                         public void call(Throwable throwable) {
                             progress.setVisibility(View.GONE);
                             calculateBtn.setEnabled(true);
-                            Toast.makeText(IOCombineSampleActivity.this, R.string.mix_error_message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CombineIOSampleActivity.this, R.string.mix_error_message, Toast.LENGTH_SHORT).show();
                         }
                     })
                     .onErrorResumeNext(Observable.<Integer>empty());//prevent observable from breaking
