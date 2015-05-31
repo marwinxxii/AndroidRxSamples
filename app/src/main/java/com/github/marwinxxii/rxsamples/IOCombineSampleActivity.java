@@ -43,7 +43,7 @@ public class IOCombineSampleActivity extends Activity {
           .flatMap(new Func1<OnClickEvent, Observable<Integer>>() {
               @Override
               public Observable<Integer> call(OnClickEvent onClickEvent) {
-                  return observeLongApiCall()
+                  return observeBackgroundOperation()
                     .observeOn(AndroidSchedulers.mainThread())//interaction with UI must be performed on main thread
                     .doOnError(new Action1<Throwable>() {//handle error before it will be suppressed
                         @Override
@@ -65,6 +65,8 @@ public class IOCombineSampleActivity extends Activity {
                   result.setText(integer.toString());
               }
           });
+        /*if you have multiple subscriptions you can use CompositeSubscription, add subscriptions there and
+        unsubscribe to all of them in one place.*/
     }
 
     @Override
@@ -73,13 +75,14 @@ public class IOCombineSampleActivity extends Activity {
         super.onStop();
     }
 
-    private static Observable<Integer> observeLongApiCall() {
+    private static Observable<Integer> observeBackgroundOperation() {
         return Observable.just(new Random().nextInt())
           .delay(3L, TimeUnit.SECONDS)//by default operates on computation Scheduler
           .doOnNext(new Action1<Integer>() {
               @Override
               public void call(Integer integer) {
                   if (new Random().nextBoolean()) {
+                      //simulate error
                       throw new RuntimeException("Error calculating value");
                   }
               }
