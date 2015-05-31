@@ -85,4 +85,21 @@ public class IOCombineSampleActivity extends Activity {
               }
           });
     }
+
+    //Transformer to be used in flatMap
+    public static class IOErrorTransformer<T> implements Observable.Transformer<T, T> {
+        private final Action1<Throwable> mErrorHandler;
+
+        public IOErrorTransformer(Action1<Throwable> errorHandler) {
+            mErrorHandler = errorHandler;
+        }
+
+        @Override
+        public Observable<T> call(Observable<T> observable) {
+            return observable
+              .observeOn(AndroidSchedulers.mainThread())//interaction with UI must be performed on main thread
+              .doOnError(mErrorHandler)
+              .onErrorResumeNext(Observable.<T>empty());//prevent observable from breaking
+        }
+    }
 }
