@@ -61,7 +61,7 @@
 
                 <data
                     android:host="${applicationId}"
-                    android:path="/iocombine"
+                    android:path="/combineio"
                     android:scheme="@string/deep_link_scheme" />
             </intent-filter>
         </activity>
