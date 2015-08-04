@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    style="@style/Default"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/sample_event_bus_simple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/sample_event_bus_simple" />
+
+    <Button
+        android:id="@+id/run_location_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/run_location_service" />
+
+    <Button
+        android:id="@+id/listen_location_changes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/listen_location_changes" />
+
+    <TextView
+        android:id="@+id/last_known_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+</LinearLayout>

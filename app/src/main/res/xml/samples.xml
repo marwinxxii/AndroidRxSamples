@@ -15,4 +15,10 @@
             android:targetClass="com.github.marwinxxii.rxsamples.CombineIOSampleActivity"
             android:targetPackage="@string/app_id" />
     </Preference>
+
+    <Preference android:title="@string/sample_event_bus">
+        <intent
+            android:targetClass="com.github.marwinxxii.rxsamples.EventBusSampleActivity"
+            android:targetPackage="@string/app_id" />
+    </Preference>
 </PreferenceScreen>

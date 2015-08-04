@@ -8,6 +8,7 @@
     <string name="email_label">Your email:</string>
     <string name="sample_edittext">Edit text sample</string>
     <string name="sample_email">Email sample (EditText+Spinner)</string>
+    <string name="sample_event_bus">Event bus sample</string>
 
     <string-array name="domains">
         <item>rxmail.com</item>
@@ -21,4 +22,10 @@
     <string name="mix_calculate">Calculate next random value</string>
     <string name="mix_result">Calculated value</string>
     <string name="mix_error_message">Handling occurred error</string>
+    <string name="sample_event_bus_simple">Run simple sample</string>
+    <string name="run_location_service">Run location service</string>
+    <string name="stop_location_service">Stop location service</string>
+    <string name="listen_location_changes">Listen for location changes</string>
+    <string name="listen_location_changes_stop">Stop listening location changes</string>
+    <string name="last_known_location">Last known location: %s</string>
 </resources>

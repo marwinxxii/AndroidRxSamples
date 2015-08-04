@@ -65,6 +65,22 @@
                     android:scheme="@string/deep_link_scheme" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".EventBusSampleActivity"
+            android:label="@string/sample_event_bus">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="${applicationId}"
+                    android:path="/eventbus"
+                    android:scheme="@string/deep_link_scheme" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
