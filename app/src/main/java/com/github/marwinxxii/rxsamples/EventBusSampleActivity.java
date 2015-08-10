@@ -134,8 +134,8 @@ public class EventBusSampleActivity extends Activity {
         mSubscriptions.add(mLocationChangesSubscription);
     }
 
-    public static <E1, E2> Observable<Object> observeEvents(EventBus<E1> bus1, EventBus<E2> bus2) {
-        return Observable.merge(bus1.observe(), bus2.observe());
+    public static <E1, E2> Observable<Object> observeEvents(EventBus<Object> bus, Class<E1> class1, Class<E2> class2) {
+        return Observable.merge(bus.observeEvents(class1), bus.observeEvents(class2));
     }
 
     public static class EventBus<T> {
